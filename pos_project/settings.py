@@ -1,20 +1,26 @@
+import os
 import dj_database_url
 from pathlib import Path
 
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Security
 
-SECRET_KEY = "change-this-secret-key-before-production"
+SECRET_KEY = os.environ.get("SECRET_KEY", "dev-only-secret-key")
 
-DEBUG = True
+DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
+
+# Hosts
 
 ALLOWED_HOSTS = [
     "127.0.0.1",
     "localhost",
-    "172.20.10.5",
 ]
 
+RENDER_EXTERNAL_HOSTNAME = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
+
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -26,9 +32,9 @@ INSTALLED_APPS = [
     "core",
 ]
 
-
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -37,9 +43,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-
 ROOT_URLCONF = "pos_project.urls"
-
 
 TEMPLATES = [
     {
@@ -51,17 +55,12 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                "django.middleware.security.SecurityMiddleware",
-                "whitenoise.middleware.WhiteNoiseMiddleware",
-
             ],
         },
     },
 ]
 
-
 WSGI_APPLICATION = "pos_project.wsgi.application"
-
 
 DATABASES = {
     "default": dj_database_url.config(
@@ -70,9 +69,7 @@ DATABASES = {
     )
 }
 
-
 AUTH_PASSWORD_VALIDATORS = []
-
 
 LANGUAGE_CODE = "en-us"
 
@@ -82,13 +79,19 @@ USE_I18N = True
 
 USE_TZ = True
 
-
-STATIC_URL = "static/"
+STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
 
 LOGIN_URL = "/login/"
 LOGIN_REDIRECT_URL = "/"
@@ -96,9 +99,18 @@ LOGOUT_REDIRECT_URL = "/login/"
 
 AUTH_USER_MODEL = "core.User"
 
+# CSRF
 
 CSRF_TRUSTED_ORIGINS = [
     "http://127.0.0.1:8000",
     "http://localhost:8000",
-    "http://172.20.10.5:8000",
 ]
+
+if RENDER_EXTERNAL_HOSTNAME:
+    CSRF_TRUSTED_ORIGINS.append(
+        f"https://{RENDER_EXTERNAL_HOSTNAME}"
+    )
+
+# Render runs behind a proxy
+
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
