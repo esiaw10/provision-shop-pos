@@ -1,0 +1,692 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>POS System</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding-bottom: 150px;
+      background: #f5f5f5;
+      color: #222;
+      font-family: Arial, sans-serif;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    .top {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 15px;
+      background: #fff;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      padding: 15px;
+    }
+
+    .top .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      padding: 0;
+    }
+
+    .nav-left a {
+      color: #0d6efd;
+      font-weight: bold;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .nav-left a:hover {
+      text-decoration: underline;
+    }
+
+    .store-name {
+      font-size: 18px;
+      white-space: nowrap;
+    }
+
+    /* RIGHT SIDE */
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-left: auto;
+    }
+
+    .logout-link {
+      color: #dc3545 !important;
+      font-weight: bold;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .logout-link:hover {
+      text-decoration: underline;
+    }
+
+    /* MOBILE */
+    @media (max-width: 700px) {
+      .top .container {
+        align-items: flex-start;
+      }
+
+      .nav-left {
+        gap: 10px;
+      }
+
+      .nav-right {
+        margin-left: auto;
+      }
+
+      .store-name {
+        width: 100%;
+      }
+    }
+
+    .search {
+      display: flex;
+      gap: 8px;
+    }
+
+    .search input {
+      flex: 1;
+      min-width: 0;
+      padding: 14px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 18px;
+    }
+
+    .search button {
+      padding: 14px 20px;
+      border: 0;
+      border-radius: 8px;
+      background: #0d6efd;
+      color: #fff;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .cats {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      margin: 15px 0;
+      padding-bottom: 5px;
+    }
+
+    .cats a {
+      padding: 10px 14px;
+      border: 1px solid #ddd;
+      border-radius: 20px;
+      background: #fff;
+      color: #222;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .group {
+      margin-top: 20px;
+      color: #333;
+      font-size: 22px;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+
+    .product {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 8px 0;
+      padding: 15px;
+      border-radius: 10px;
+      background: #fff;
+    }
+
+    .info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .name {
+      font-size: 18px;
+      font-weight: bold;
+      overflow-wrap: anywhere;
+    }
+
+    .meta {
+      margin-top: 4px;
+      color: #666;
+      font-size: 14px;
+    }
+
+    .low {
+      color: #b00;
+      font-weight: bold;
+    }
+
+    .sell {
+      width: 60px;
+      height: 60px;
+      border: 2px solid #ffda6a;
+      border-radius: 12px;
+      background: #fff3cd;
+      color: #664d03;
+      font-size: 32px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .cart-footer {
+      position: fixed;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 999;
+      padding: 15px;
+      border-radius: 16px 16px 0 0;
+      background: #fff;
+      box-shadow: 0 -4px 20px rgba(0, 0, 0, .15);
+    }
+
+    .cart-container {
+      display: flex;
+      max-width: 1000px;
+      margin: auto;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .cart-header,
+    .review-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .cart-header {
+      font-weight: bold;
+    }
+
+    .cart-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .checkout-btn,
+    .review-toggle-btn {
+      padding: 14px;
+      border: 0;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .checkout-btn {
+      flex: 2;
+      background: #198754;
+    }
+
+    .review-toggle-btn {
+      flex: 1;
+      background: #6c757d;
+    }
+
+    .review-panel {
+      max-height: 200px;
+      margin-top: 10px;
+      padding-top: 10px;
+      overflow-y: auto;
+      border-top: 1px solid #eee;
+    }
+
+    .review-item {
+      padding: 8px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .review-item-name {
+      flex: 1;
+      font-weight: bold;
+    }
+
+    .review-item-qty {
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: #eef2f5;
+      font-weight: bold;
+    }
+
+    .remove-btn {
+      padding: 6px 12px;
+      border: 0;
+      border-radius: 6px;
+      background: #dc3545;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: .65;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .theme-switch {
+      position: relative;
+      display: inline-block;
+      width: 42px;
+      height: 24px;
+      cursor: pointer;
+    }
+
+    .theme-switch input {
+      width: 0;
+      height: 0;
+      opacity: 0;
+    }
+
+    .theme-slider {
+      position: absolute;
+      inset: 0;
+      border-radius: 20px;
+      background: #adb5bd;
+      transition: .2s;
+    }
+
+    .theme-slider::before {
+      content: "☀️";
+      position: absolute;
+      left: 3px;
+      bottom: 3px;
+      display: grid;
+      width: 18px;
+      height: 18px;
+      place-items: center;
+      border-radius: 50%;
+      background: #fff;
+      font-size: 12px;
+      transition: .2s;
+    }
+
+    .theme-switch input:checked+.theme-slider {
+      background: #0d6efd;
+    }
+
+    .theme-switch input:checked+.theme-slider::before {
+      content: "🌙";
+      transform: translateX(18px);
+    }
+
+    html[data-theme="dark"] {
+      color-scheme: dark;
+    }
+
+    html[data-theme="dark"] body {
+      background: #121212;
+      color: #e9ecef;
+    }
+
+    html[data-theme="dark"] .top,
+    html[data-theme="dark"] .product,
+    html[data-theme="dark"] .cart-footer,
+    html[data-theme="dark"] .cats a {
+      background: #1e1e1e;
+      color: #e9ecef;
+      border-color: #444;
+    }
+
+    html[data-theme="dark"] .group {
+      color: #e9ecef;
+    }
+
+    html[data-theme="dark"] .meta {
+      color: #adb5bd;
+    }
+
+    html[data-theme="dark"] .review-panel,
+    html[data-theme="dark"] .review-item {
+      border-color: #444;
+    }
+
+    html[data-theme="dark"] .review-item-qty {
+      background: #333;
+      color: #e9ecef;
+    }
+
+    html[data-theme="dark"] .search input {
+      background: #2b2b2b;
+      color: #fff;
+      border-color: #555;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="top">
+    <div class="container">
+
+      <!-- LEFT SIDE -->
+      <div class="nav-left">
+
+        <a href="{% url 'dashboard' %}">🏠 Dashboard</a>
+        <a href="{% url 'daily_sales' %}">📊 Daily Sales</a>
+        <a href="{% url 'restock' %}">📦 Restock</a>
+
+      </div>
+
+      <!-- RIGHT SIDE -->
+      <div class="nav-right">
+
+        <a href="{% url 'logout' %}" class="logout-link">
+          Logout
+        </a>
+
+        <label class="theme-switch" title="Toggle dark mode">
+          <input type="checkbox" data-theme-toggle aria-label="Toggle dark mode">
+          <span class="theme-slider"></span>
+        </label>
+
+      </div>
+
+    </div>
+  </header>
+
+  <main class="container">
+    <form class="search" method="get">
+      <input name="q" value="{{ query }}" placeholder="Search products..." autofocus>
+      <button type="submit">Search</button>
+    </form>
+
+    <nav class="cats">
+      <a href="{% url 'pos' %}">All</a>
+      {% for c in categories %}
+      <a href="{% url 'pos' %}?category={{ c|urlencode }}">{{ c }}</a>
+      {% endfor %}
+    </nav>
+
+    {% regroup products by name|slice:":1" as grouped %}
+    {% for group in grouped %}
+    <section>
+      <div class="group">{{ group.grouper|upper }}</div>
+
+      {% for product in group.list %}
+      <article class="product" id="product-{{ product.id }}">
+        <div class="info">
+          <div class="name">{{ product.name }}</div>
+          <div class="meta">{{ product.category.name }} · GH₵ {{ product.selling_price }}</div>
+          <div class="meta stock {% if product.is_low_stock %}low{% endif %}">
+            Stock: <span>{{ product.stock }}</span>
+            {% if product.is_low_stock %} ⚠ LOW{% endif %}
+          </div>
+        </div>
+
+        <button type="button" class="sell" aria-label="Stage one {{ product.name }} for stock deduction"
+          data-product-id="{{ product.id }}" data-product-name="{{ product.name }}"
+          data-product-price="{{ product.selling_price }}" data-product-stock="{{ product.stock }}">−</button>
+      </article>
+      {% endfor %}
+    </section>
+    {% empty %}
+    <p>No products found.</p>
+    {% endfor %}
+  </main>
+
+  <div class="hidden">{% csrf_token %}</div>
+
+  <aside id="cart-footer" class="cart-footer hidden">
+    <div class="cart-container">
+      <div class="cart-header">
+        <span id="cart-qty-label">0 items selected</span>
+        <span id="cart-total-label" style="color:#198754">Total: GH₵ 0.00</span>
+      </div>
+
+      <div id="review-panel" class="review-panel hidden"></div>
+
+      <div class="cart-actions">
+        <button type="button" class="review-toggle-btn" id="toggle-review-btn">📋 Review</button>
+        <button type="button" class="checkout-btn" id="submit-deductions-btn">Confirm Sale &amp; Deduct</button>
+      </div>
+    </div>
+  </aside>
+
+  <script>
+    "use strict";
+
+    const basket = Object.create(null);
+    let reviewOpen = false;
+
+    const cartFooter = document.getElementById("cart-footer");
+    const reviewPanel = document.getElementById("review-panel");
+    const reviewButton = document.getElementById("toggle-review-btn");
+    const checkoutButton = document.getElementById("submit-deductions-btn");
+
+    function applyTheme(theme) {
+      document.documentElement.dataset.theme = theme;
+      document.querySelectorAll("[data-theme-toggle]").forEach((toggle) => {
+        toggle.checked = theme === "dark";
+      });
+    }
+
+    applyTheme(localStorage.getItem("pos-theme") || "light");
+
+    document.querySelectorAll("[data-theme-toggle]").forEach((toggle) => {
+      toggle.addEventListener("change", () => {
+        const theme = toggle.checked ? "dark" : "light";
+        localStorage.setItem("pos-theme", theme);
+        applyTheme(theme);
+      });
+    });
+
+    document.querySelectorAll(".sell").forEach((button) => {
+      button.addEventListener("click", () => stageToCart(button.dataset));
+    });
+
+    reviewButton.addEventListener("click", toggleReviewDrawer);
+    checkoutButton.addEventListener("click", executeBatchSale);
+
+    function stageToCart(product) {
+      const id = product.productId;
+      const price = Number(product.productPrice);
+      const stock = Number.parseInt(product.productStock, 10);
+
+      if (!id || !Number.isFinite(price) || !Number.isInteger(stock)) {
+        alert("This product has invalid price or stock data.");
+        return;
+      }
+
+      const staged = basket[id] ? basket[id].qty : 0;
+
+      if (staged >= stock) {
+        alert("Out of physical stock!");
+        return;
+      }
+
+      if (!basket[id]) {
+        basket[id] = {
+          name: product.productName,
+          price: price,
+          qty: 0
+        };
+      }
+
+      basket[id].qty += 1;
+      renderBasketUI();
+    }
+
+    function removeOneFromCart(id) {
+      if (!basket[id]) return;
+
+      basket[id].qty -= 1;
+
+      if (basket[id].qty <= 0) {
+        delete basket[id];
+      }
+
+      renderBasketUI();
+    }
+
+    function toggleReviewDrawer() {
+      reviewOpen = !reviewOpen;
+      reviewPanel.classList.toggle("hidden", !reviewOpen);
+      reviewButton.textContent = reviewOpen ? "✖ Close" : "📋 Review";
+    }
+
+    function updateVisibleStock() {
+      document.querySelectorAll(".sell").forEach((button) => {
+        const productId = button.dataset.productId;
+        const savedStock = Number.parseInt(button.dataset.productStock, 10);
+        const stagedQuantity = basket[productId] ? basket[productId].qty : 0;
+        const availableStock = Math.max(0, savedStock - stagedQuantity);
+
+        document.querySelector(`#product-${productId} .stock span`).textContent = availableStock;
+        button.disabled = availableStock === 0;
+      });
+    }
+
+    function renderBasketUI() {
+      const entries = Object.entries(basket);
+      let totalItems = 0;
+      let grandTotal = 0;
+
+      reviewPanel.replaceChildren();
+
+      for (const [id, item] of entries) {
+        totalItems += item.qty;
+        grandTotal += item.qty * item.price;
+
+        const row = document.createElement("div");
+        row.className = "review-item";
+
+        const name = document.createElement("span");
+        name.className = "review-item-name";
+        name.textContent = item.name;
+
+        const quantity = document.createElement("span");
+        quantity.className = "review-item-qty";
+        quantity.textContent = `x${item.qty}`;
+
+        const remove = document.createElement("button");
+        remove.type = "button";
+        remove.className = "remove-btn";
+        remove.textContent = "Remove 1";
+        remove.addEventListener("click", () => removeOneFromCart(id));
+
+        row.append(name, quantity, remove);
+        reviewPanel.append(row);
+      }
+
+      updateVisibleStock();
+
+      const hasItems = totalItems > 0;
+      cartFooter.classList.toggle("hidden", !hasItems);
+
+      document.getElementById("cart-qty-label").textContent =
+        `${totalItems} item(s) selected`;
+
+      document.getElementById("cart-total-label").textContent =
+        `Total: GH₵ ${grandTotal.toFixed(2)}`;
+
+      if (!hasItems) {
+        reviewOpen = false;
+        reviewPanel.classList.add("hidden");
+        reviewButton.textContent = "📋 Review";
+      }
+    }
+
+    function getCookie(name) {
+      const prefix = `${name}=`;
+
+      return document.cookie
+        .split(";")
+        .map((value) => value.trim())
+        .find((value) => value.startsWith(prefix))
+        ?.slice(prefix.length) || null;
+    }
+
+    function getCsrfToken() {
+      return getCookie("csrftoken") ||
+        document.querySelector("[name=csrfmiddlewaretoken]")?.value ||
+        "";
+    }
+
+    async function executeBatchSale() {
+      const items = Object.entries(basket).map(([id, item]) => ({
+        id: id,
+        quantity: item.qty
+      }));
+
+      if (!items.length) return;
+
+      checkoutButton.disabled = true;
+      checkoutButton.textContent = "Processing...";
+
+      try {
+        const response = await fetch("/pos/cart-sale/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCsrfToken(),
+            "X-Requested-With": "XMLHttpRequest"
+          },
+          body: JSON.stringify({ items: items })
+        });
+
+        const contentType = response.headers.get("content-type") || "";
+        const data = contentType.includes("application/json")
+          ? await response.json()
+          : null;
+
+        if (!response.ok || !data?.ok) {
+          throw new Error(data?.error || "Unable to complete this sale.");
+        }
+
+        for (const update of data.updates || []) {
+          const card = document.getElementById(`product-${update.id}`);
+
+          if (!card) continue;
+
+          card.querySelector(".sell").dataset.productStock = update.new_stock;
+          card.querySelector(".stock").classList.toggle("low", Boolean(update.is_low));
+        }
+
+        Object.keys(basket).forEach((id) => delete basket[id]);
+        renderBasketUI();
+
+        alert("Stock updated successfully!");
+      } catch (error) {
+        alert(error.message || "Unable to complete the sale.");
+      } finally {
+        checkoutButton.disabled = false;
+        checkoutButton.textContent = "Confirm Sale & Deduct";
+      }
+    }
+  </script>
+</body>
+
+</html>

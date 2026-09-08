@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Login — Provision POS</title>
+    <style>
+        :root {
+            --primary: #0d6efd;
+            --primary-hover: #0b5ed7;
+            --dark: #212529;
+            --light: #f8f9fa;
+            --border: #dee2e6;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: #eef2f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 15px;
+        }
+
+        .login-card {
+            background: #ffffff;
+            width: 100%;
+            max-width: 400px;
+            padding: 30px 25px;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .brand-section {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .brand-logo {
+            font-size: 36px;
+            margin-bottom: 5px;
+        }
+
+        .brand-title {
+            font-size: 22px;
+            font-weight: bold;
+            color: var(--dark);
+            margin: 0;
+        }
+
+        .brand-subtitle {
+            font-size: 14px;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: bold;
+            color: #495057;
+            margin-bottom: 6px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 14px;
+            font-size: 16px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: var(--light);
+            color: var(--dark);
+            outline: none;
+            transition: border-color 0.2s;
+            -webkit-appearance: none;
+        }
+
+        .form-group input:focus {
+            border-color: var(--primary);
+            background: #ffffff;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: var(--primary);
+            color: #ffffff;
+            border: none;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.2s;
+        }
+
+        .submit-btn:active {
+            background: var(--primary-hover);
+        }
+
+        .error-box {
+            background: #f8d7da;
+            color: #842029;
+            border: 1px solid #f5c2c7;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 14px;
+            margin-bottom: 18px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="login-card">
+        <div class="brand-section">
+            <div class="brand-logo">🏪</div>
+            <h1 class="brand-title">Provision POS</h1>
+            <div class="brand-subtitle">Sign in to manage your shop inventory</div>
+        </div>
+
+        {% if form.errors or error_message %}
+        <div class="error-box">
+            ❌ Invalid username or password. Please try again.
+        </div>
+        {% endif %}
+
+        <form method="post" action="{% url 'login' %}">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="id_username">Username</label>
+                <input type="text" name="username" id="id_username" placeholder="Enter username" required autofocus
+                    autocomplete="username">
+            </div>
+
+            <div class="form-group">
+                <label for="id_password">Password</label>
+                <input type="password" name="password" id="id_password" placeholder="Enter password" required
+                    autocomplete="current-password">
+            </div>
+
+            <button type="submit" class="submit-btn">Sign In</button>
+        </form>
+    </div>
+
+</body>
+
+</html>

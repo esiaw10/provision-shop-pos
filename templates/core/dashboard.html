@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dashboard</title>
+    <style>
+        :root {
+            --blue: #0d6efd;
+            --green: #198754;
+            --red: #dc3545;
+            --text: #212529;
+            --bg: #f8f9fa;
+            --card: #ffffff;
+            --border: #dee2e6;
+            --muted: #6c757d;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 20px auto;
+            padding: 20px;
+            max-width: 900px;
+            background: var(--bg);
+            color: var(--text);
+            font-family: Arial, sans-serif;
+        }
+
+        /* ========================= NAVIGATION ========================= */
+        .nav-bar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 25px;
+            padding: 12px 15px;
+            border-radius: 10px;
+            background: var(--card);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, .05);
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 18px;
+        }
+
+        .nav-left a {
+            color: var(--blue);
+            font-weight: bold;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .nav-left a:hover {
+            text-decoration: underline;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            margin-left: auto;
+        }
+
+        .logout-link {
+            color: var(--red) !important;
+            font-weight: bold;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .logout-link:hover {
+            text-decoration: underline;
+        }
+
+        /* ========================= DARK MODE SWITCH ========================= */
+        .theme-switch {
+            position: relative;
+            display: inline-block;
+            width: 42px;
+            height: 24px;
+            cursor: pointer;
+        }
+
+        .theme-switch input {
+            width: 0;
+            height: 0;
+            opacity: 0;
+        }
+
+        .theme-slider {
+            position: absolute;
+            inset: 0;
+            border-radius: 20px;
+            background: #adb5bd;
+            transition: .2s;
+        }
+
+        .theme-slider::before {
+            content: "☀️";
+            position: absolute;
+            left: 3px;
+            bottom: 3px;
+            display: grid;
+            width: 18px;
+            height: 18px;
+            place-items: center;
+            border-radius: 50%;
+            background: #fff;
+            font-size: 12px;
+            transition: .2s;
+        }
+
+        .theme-switch input:checked+.theme-slider {
+            background: var(--blue);
+        }
+
+        .theme-switch input:checked+.theme-slider::before {
+            content: "🌙";
+            transform: translateX(18px);
+        }
+
+        /* ========================= METRICS ========================= */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .metric-card {
+            padding: 24px 20px;
+            border-left: 5px solid var(--blue);
+            border-radius: 12px;
+            background: var(--card);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, .05);
+        }
+
+        .metric-card.sales {
+            border-left-color: var(--green);
+        }
+
+        .metric-label {
+            color: #666;
+            font-size: 13px;
+            font-weight: bold;
+            letter-spacing: .5px;
+            text-transform: uppercase;
+        }
+
+        .metric-value {
+            margin-top: 8px;
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        .sales .metric-value {
+            color: var(--green);
+        }
+
+        /* ========================= WEEKLY SALES ========================= */
+        .weekly-sales {
+            margin-top: 25px;
+        }
+
+        .weekly-title {
+            margin-bottom: 15px;
+        }
+
+        .weekly-title h2 {
+            margin: 0;
+            font-size: 22px;
+        }
+
+        .weekly-title p {
+            margin: 6px 0 0;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        /* ========================= GRAPH ========================= */
+        .graph-box {
+            position: relative;
+            width: 100%;
+            height: 350px;
+            padding: 15px;
+            border-radius: 12px;
+            background: var(--card);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, .05);
+        }
+
+        #salesGraph {
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+        }
+
+        .graph-grid {
+            stroke: #dee2e6;
+            stroke-width: 1;
+        }
+
+        .graph-line {
+            fill: none;
+            stroke: var(--green);
+            stroke-width: 4;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .graph-point {
+            fill: #fff;
+            stroke: var(--green);
+            stroke-width: 3;
+        }
+
+        .graph-label {
+            fill: var(--muted);
+            font-size: 13px;
+            text-anchor: middle;
+        }
+
+        .graph-amount {
+            fill: var(--green);
+            font-size: 12px;
+            font-weight: bold;
+            text-anchor: middle;
+        }
+
+        /* ========================= WEEKLY TABLE ========================= */
+        .weekly-table {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 12px;
+            background: var(--card);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, .05);
+        }
+
+        .weekly-table h3 {
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        .weekly-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .weekly-table th,
+        .weekly-table td {
+            padding: 12px;
+            border-bottom: 1px solid var(--border);
+            text-align: left;
+        }
+
+        .weekly-table th {
+            color: var(--muted);
+            font-size: 13px;
+            text-transform: uppercase;
+        }
+
+        .weekly-table th:last-child,
+        .weekly-table td:last-child {
+            text-align: right;
+        }
+
+        .weekly-table td:last-child {
+            color: var(--green);
+            font-weight: bold;
+        }
+
+        /* ========================= NOTE ========================= */
+        .note {
+            margin-top: 20px;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        /* ========================= DARK MODE ========================= */
+        html[data-theme="dark"] {
+            color-scheme: dark;
+        }
+
+        html[data-theme="dark"] body {
+            background: #121212;
+            color: #e9ecef;
+        }
+
+        html[data-theme="dark"] .nav-bar,
+        html[data-theme="dark"] .metric-card,
+        html[data-theme="dark"] .graph-box,
+        html[data-theme="dark"] .weekly-table {
+            background: #1e1e1e;
+            color: #e9ecef;
+        }
+
+        html[data-theme="dark"] .metric-label,
+        html[data-theme="dark"] .weekly-title p,
+        html[data-theme="dark"] .note {
+            color: #adb5bd;
+        }
+
+        html[data-theme="dark"] .graph-grid {
+            stroke: #444;
+        }
+
+        html[data-theme="dark"] .graph-label {
+            fill: #adb5bd;
+        }
+
+        html[data-theme="dark"] .weekly-table th,
+        html[data-theme="dark"] .weekly-table td {
+            border-color: #444;
+        }
+
+        html[data-theme="dark"] .weekly-table th {
+            color: #adb5bd;
+        }
+
+        /* ========================= MOBILE ========================= */
+        @media (min-width: 480px) {
+            .metrics-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            body {
+                margin: 10px auto;
+                padding: 10px;
+            }
+
+            .nav-bar {
+                align-items: flex-start;
+                flex-wrap: wrap;
+            }
+
+            .nav-left {
+                width: 100%;
+                gap: 10px;
+            }
+
+            .nav-right {
+                width: 100%;
+                justify-content: flex-end;
+                margin-left: 0;
+            }
+
+            .graph-box {
+                height: 300px;
+            }
+
+            .metric-value {
+                font-size: 26px;
+            }
+        }
+    </style>
+</head>
+
+<body> <!-- ========================= NAVIGATION ========================= -->
+    <nav class="nav-bar">
+        <div class="nav-left"> <a href="{% url 'pos' %}"> 🛒 Open POS </a> <a href="{% url 'daily_sales' %}"> 📊 Daily
+                Sales </a> <a href="{% url 'restock' %}"> 📦 Restock </a> </div>
+        <div class="nav-right"> <a href="{% url 'logout' %}" class="logout-link"> Logout </a> <label
+                class="theme-switch" title="Toggle dark mode"> <input type="checkbox" data-theme-toggle
+                    aria-label="Toggle dark mode"> <span class="theme-slider"></span> </label> </div>
+    </nav> <!-- ========================= DASHBOARD METRICS ========================= -->
+    <h1>🏪 {{ request.user.store.name|default:"EMM STORE" }}</h1>
+    <section class="metrics-grid">
+        <article class="metric-card sales">
+            <div class="metric-label"> Total Sales </div>
+            <div class="metric-value"> GH₵ {{ total_sales|floatformat:2 }} </div>
+        </article>
+        <article class="metric-card">
+            <div class="metric-label"> Active Products </div>
+            <div class="metric-value"> {{ active_products_count }} Products </div>
+        </article>
+    </section> <!-- ========================= CURRENT WEEK SALES ========================= -->
+    <section class="weekly-sales">
+        <div class="weekly-title">
+            <h2> 📈 Sales This Week </h2>
+            <p> Sunday to Saturday: {{ week_start|date:"j M" }} - {{ week_end|date:"j M Y" }} </p>
+        </div> <!-- GRAPH -->
+        <div class="graph-box"> <svg id="salesGraph" viewBox="0 0 800 350" preserveAspectRatio="none"
+                aria-label="Current week sales graph" role="img"> </svg> </div> <!-- TABLE -->
+        <div class="weekly-table">
+            <h3> Weekly Sales </h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Day</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody> {% for item in weekly_sales_data %} <tr>
+                        <td> {{ item.day }} </td>
+                        <td> GH₵ {{ item.amount|floatformat:2 }} </td>
+                    </tr> {% empty %} <tr>
+                        <td colspan="2"> No sales recorded this week. </td>
+                    </tr> {% endfor %} </tbody>
+            </table>
+        </div>
+    </section> <!-- ========================= NOTE ========================= -->
+    <p class="note"> Use <strong>Daily Sales</strong> to choose a date and see itemized sales. </p>
+    <!-- ========================= GRAPH SCRIPT ========================= -->
+    <script> "use strict"; const weeklySales = [{% for item in weekly_sales_data %} { day: "{{ item.day|escapejs }}", amount: Number("{{ item.amount|default:'0' }}") } {% if not forloop.last %}, {% endif %} {% endfor %} ]; function drawSalesGraph() { const svg = document.getElementById("salesGraph"); if (!svg) { return; } /* * Make sure we always have * Sunday through Saturday. */ if (weeklySales.length !== 7) { svg.innerHTML = ` <text x="400" y="175" text-anchor="middle" fill="#6c757d" font-size="16" > Weekly sales data unavailable </text> `; return; } const width = 800; const height = 350; const left = 65; const right = 25; const top = 30; const bottom = 55; const graphWidth = width - left - right; const graphHeight = height - top - bottom; /* * Get all sales amounts. */ const amounts = weeklySales.map(item => Number.isFinite(item.amount) ? item.amount : 0); /* * Find highest sales amount. */ let maxAmount = Math.max(...amounts); /* * If there are no sales, * use a small scale. */ if (maxAmount <= 0) { maxAmount = 100; } /* * Add space above highest point. */ maxAmount *= 1.2; let svgContent = ""; /* * Draw horizontal grid lines. */ for (let i = 0; i <= 4; i++) { const y = top + (graphHeight / 4) * i; const value = maxAmount - (maxAmount / 4) * i; svgContent += ` <line x1="${left}" y1="${y}" x2="${width - right}" y2="${y}" class="graph-grid" /> <text x="${left - 10}" y="${y + 4}" text-anchor="end" class="graph-label" > GH₵ ${value.toFixed(0)} </text> `; } /* * Calculate graph points. */ const points = weeklySales.map((item, index) => { const x = left + (graphWidth / 6) * index; const y = top + graphHeight - (item.amount / maxAmount) * graphHeight; return { x, y, day: item.day, amount: item.amount }; }); /* * Create the line. */ const linePoints = points.map(point => `${point.x},${point.y}`).join(" "); svgContent += ` <polyline points="${linePoints}" class="graph-line" /> `; /* * Draw points and labels. */ points.forEach(point => { svgContent += ` <circle cx="${point.x}" cy="${point.y}" r="6" class="graph-point" /> <text x="${point.x}" y="${point.y - 14}" class="graph-amount" > GH₵ ${point.amount.toFixed(2)} </text> <text x="${point.x}" y="${height - 20}" class="graph-label" > ${point.day.substring(0, 3)} </text> `; }); /* * Put graph into page. */ svg.innerHTML = svgContent; } /* * Draw graph when page loads. */ drawSalesGraph(); /* * Redraw if screen size changes. */ window.addEventListener("resize", drawSalesGraph); /* ========================= DARK MODE ========================= */ function applyTheme(theme) { document.documentElement.dataset.theme = theme; document.querySelectorAll("[data-theme-toggle]").forEach(toggle => { toggle.checked = theme === "dark"; }); } applyTheme(localStorage.getItem("pos-theme") || "light"); document.querySelectorAll("[data-theme-toggle]").forEach(toggle => { toggle.addEventListener("change", () => { const theme = toggle.checked ? "dark" : "light"; localStorage.setItem("pos-theme", theme); applyTheme(theme); }); }); </script>
+</body>
+
+</html>

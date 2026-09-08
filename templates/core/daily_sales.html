@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Daily Sales</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: #f4f6f8;
+      color: #212529;
+      font-family: Arial, sans-serif;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding: 16px;
+      background: #fff;
+      border-bottom: 1px solid #ddd;
+    }
+
+    /* LEFT SIDE */
+    .page-nav {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .page-nav a {
+      color: #0d6efd;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    .page-nav a:hover {
+      text-decoration: underline;
+    }
+
+    /* RIGHT SIDE */
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-left: auto;
+    }
+
+    .logout-link {
+      color: #dc3545 !important;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    .logout-link:hover {
+      text-decoration: underline;
+    }
+
+    /* MOBILE */
+    @media (max-width: 600px) {
+      header {
+        align-items: flex-start;
+      }
+
+      .page-nav {
+        gap: 10px;
+      }
+
+      .header-right {
+        margin-left: auto;
+      }
+    }
+
+    a {
+      color: #0d6efd;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    main {
+      max-width: 900px;
+      margin: auto;
+      padding: 24px 16px;
+    }
+
+    .filter,
+    .summary,
+    .table-wrap {
+      margin-bottom: 18px;
+      padding: 16px;
+      border-radius: 10px;
+      background: #fff;
+    }
+
+    input,
+    button {
+      padding: 10px;
+      border-radius: 6px;
+      font: inherit;
+    }
+
+    input {
+      border: 1px solid #bbb;
+    }
+
+    .filter button {
+      border: 0;
+      background: #0d6efd;
+      color: #fff;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .summary {
+      color: #198754;
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      min-width: 650px;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      padding: 12px 8px;
+      border-bottom: 1px solid #ddd;
+      text-align: left;
+    }
+
+    th {
+      color: #6c757d;
+      font-size: 13px;
+      text-transform: uppercase;
+    }
+
+    .theme-switch {
+      position: relative;
+      display: inline-block;
+      width: 42px;
+      height: 24px;
+      cursor: pointer;
+    }
+
+    .theme-switch input {
+      width: 0;
+      height: 0;
+      opacity: 0;
+    }
+
+    .theme-slider {
+      position: absolute;
+      inset: 0;
+      border-radius: 20px;
+      background: #adb5bd;
+      transition: .2s;
+    }
+
+    .theme-slider::before {
+      content: "☀️";
+      position: absolute;
+      left: 3px;
+      bottom: 3px;
+      display: grid;
+      width: 18px;
+      height: 18px;
+      place-items: center;
+      border-radius: 50%;
+      background: #fff;
+      font-size: 12px;
+      transition: .2s;
+    }
+
+    .theme-switch input:checked+.theme-slider {
+      background: #0d6efd;
+    }
+
+    .theme-switch input:checked+.theme-slider::before {
+      content: "🌙";
+      transform: translateX(18px);
+    }
+
+    html[data-theme="dark"] {
+      color-scheme: dark;
+    }
+
+    html[data-theme="dark"] body {
+      background: #121212;
+      color: #e9ecef;
+    }
+
+    html[data-theme="dark"] header,
+    html[data-theme="dark"] .filter,
+    html[data-theme="dark"] .summary,
+    html[data-theme="dark"] .table-wrap {
+      background: #1e1e1e;
+      color: #e9ecef;
+      border-color: #444;
+    }
+
+    html[data-theme="dark"] th {
+      color: #adb5bd;
+    }
+
+    html[data-theme="dark"] td,
+    html[data-theme="dark"] th {
+      border-color: #444;
+    }
+
+    html[data-theme="dark"] input {
+      background: #2b2b2b;
+      color: #fff;
+      border-color: #555;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <!-- LEFT SIDE -->
+    <div class="page-nav">
+
+      <strong>Daily Sales</strong>
+
+      <a href="{% url 'dashboard' %}">🏠 Dashboard</a>
+      <a href="{% url 'pos' %}">🛒 POS</a>
+      <a href="{% url 'restock' %}">📦 Restock</a>
+
+    </div>
+
+    <!-- RIGHT SIDE -->
+    <div class="header-right">
+
+      <a href="{% url 'logout' %}" class="logout-link">
+        Logout
+      </a>
+
+      <label class="theme-switch" title="Toggle dark mode">
+        <input type="checkbox" data-theme-toggle aria-label="Toggle dark mode">
+        <span class="theme-slider"></span>
+      </label>
+
+    </div>
+  </header>
+
+  <main>
+    <form class="filter" method="get">
+      <label for="date">Sales date: </label>
+      <input id="date" type="date" name="date" value="{{ selected_date|date:'Y-m-d' }}">
+      <button type="submit">Show Sales</button>
+    </form>
+
+    <div class="summary">
+      Total for {{ selected_date|date:"j M Y" }}:
+      GH₵ {{ daily_total|floatformat:2 }}
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Time</th>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Unit Price</th>
+            <th>Total</th>
+            <th>Sold By</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for sale in sales %}
+          <tr>
+            <td>{{ sale.sold_at|date:"H:i" }}</td>
+            <td>{{ sale.product.name }}</td>
+            <td>{{ sale.quantity }}</td>
+            <td>GH₵ {{ sale.unit_price|floatformat:2 }}</td>
+            <td>GH₵ {{ sale.total|floatformat:2 }}</td>
+            <td>{{ sale.sold_by.username }}</td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="6">No sales recorded for this date.</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <script>
+    function applyTheme(theme) {
+      document.documentElement.dataset.theme = theme;
+      document.querySelectorAll("[data-theme-toggle]").forEach((toggle) => {
+        toggle.checked = theme === "dark";
+      });
+    }
+
+    applyTheme(localStorage.getItem("pos-theme") || "light");
+
+    document.querySelectorAll("[data-theme-toggle]").forEach((toggle) => {
+      toggle.addEventListener("change", () => {
+        const theme = toggle.checked ? "dark" : "light";
+        localStorage.setItem("pos-theme", theme);
+        applyTheme(theme);
+      });
+    });
+  </script>
+</body>
+
+</html>

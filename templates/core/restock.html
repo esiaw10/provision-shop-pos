@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Restock Inventory</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #f4f6f8;
+            color: #212529;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: auto;
+            padding: 25px;
+            border-radius: 10px;
+            background: #fff;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        .navigation {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-left: auto;
+        }
+
+        .navigation a {
+            color: #0d6efd;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .navigation a:hover {
+            text-decoration: underline;
+        }
+
+        .logout-link {
+            color: #dc3545 !important;
+            font-weight: bold;
+        }
+
+        .logout-link:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 600px) {
+            .navigation {
+                align-items: flex-start;
+            }
+
+            .nav-left {
+                gap: 10px;
+            }
+
+            .nav-right {
+                margin-left: auto;
+            }
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        select,
+        input,
+        textarea {
+            width: 100%;
+            margin-top: 5px;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font: inherit;
+        }
+
+        .submit-btn {
+            margin-top: 20px;
+            padding: 12px 20px;
+            border: 0;
+            border-radius: 6px;
+            background: #198754;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .submit-btn:hover {
+            background: #146c43;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 6px;
+            background: #d1e7dd;
+        }
+
+        .theme-switch {
+            position: relative;
+            display: inline-block;
+            width: 42px;
+            height: 24px;
+            cursor: pointer;
+        }
+
+        .theme-switch input {
+            width: 0;
+            height: 0;
+            opacity: 0;
+        }
+
+        .theme-slider {
+            position: absolute;
+            inset: 0;
+            border-radius: 20px;
+            background: #adb5bd;
+            transition: .2s;
+        }
+
+        .theme-slider::before {
+            content: "☀️";
+            position: absolute;
+            left: 3px;
+            bottom: 3px;
+            display: grid;
+            width: 18px;
+            height: 18px;
+            place-items: center;
+            border-radius: 50%;
+            background: #fff;
+            font-size: 12px;
+            transition: .2s;
+        }
+
+        .theme-switch input:checked+.theme-slider {
+            background: #0d6efd;
+        }
+
+        .theme-switch input:checked+.theme-slider::before {
+            content: "🌙";
+            transform: translateX(18px);
+        }
+
+        html[data-theme="dark"] {
+            color-scheme: dark;
+        }
+
+        html[data-theme="dark"] body {
+            background: #121212;
+            color: #e9ecef;
+        }
+
+        html[data-theme="dark"] .container {
+            background: #1e1e1e;
+            color: #e9ecef;
+        }
+
+        html[data-theme="dark"] input,
+        html[data-theme="dark"] select,
+        html[data-theme="dark"] textarea {
+            background: #2b2b2b;
+            color: #fff;
+            border-color: #555;
+        }
+
+        html[data-theme="dark"] .message {
+            background: #164a32;
+            color: #e9ecef;
+        }
+    </style>
+</head>
+
+<body>
+    <main class="container">
+
+        <nav class="navigation">
+
+            <!-- LEFT SIDE -->
+            <div class="nav-left">
+                <strong>📦 Restock</strong>
+
+                <a href="{% url 'dashboard' %}">🏠 Dashboard</a>
+                <a href="{% url 'pos' %}">🛒 POS</a>
+                <a href="{% url 'daily_sales' %}">📊 Daily Sales</a>
+            </div>
+
+            <!-- RIGHT SIDE -->
+            <div class="nav-right">
+
+                <a href="{% url 'logout' %}" class="logout-link">
+                    Logout
+                </a>
+
+                <label class="theme-switch" title="Toggle dark mode">
+                    <input type="checkbox" data-theme-toggle aria-label="Toggle dark mode">
+                    <span class="theme-slider"></span>
+                </label>
+
+            </div>
+
+        </nav>
+
+
+        <h1>📦 Restock Inventory</h1>
+
+        {% if messages %}
+        {% for message in messages %}
+        <div class="message">{{ message }}</div>
+        {% endfor %}
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+
+            <label for="product">Select Product</label>
+            <select id="product" name="product" required>
+                <option value="">-- Select Product --</option>
+                {% for product in products %}
+                <option value="{{ product.id }}">
+                    {{ product.name }} — Current stock: {{ product.stock }}
+                </option>
+                {% endfor %}
+            </select>
+
+            <label for="quantity">Quantity Received</label>
+            <input id="quantity" type="number" name="quantity" min="1" placeholder="Example: 50" required>
+
+            <label for="note">Note (Optional)</label>
+            <textarea id="note" name="note" rows="3" placeholder="Example: New delivery from supplier"></textarea>
+
+            <button type="submit" class="submit-btn">➕ Add Stock</button>
+        </form>
+    </main>
+
+    <script>
+        function applyTheme(theme) {
+            document.documentElement.dataset.theme = theme;
+            document.querySelectorAll("[data-theme-toggle]").forEach((toggle) => {
+                toggle.checked = theme === "dark";
+            });
+        }
+
+        applyTheme(localStorage.getItem("pos-theme") || "light");
+
+        document.querySelectorAll("[data-theme-toggle]").forEach((toggle) => {
+            toggle.addEventListener("change", () => {
+                const theme = toggle.checked ? "dark" : "light";
+                localStorage.setItem("pos-theme", theme);
+                applyTheme(theme);
+            });
+        });
+    </script>
+</body>
+
+</html>
