@@ -1,0 +1,647 @@
+/* =========================================================
+   PHONE VIEW CSS
+   Responsive styles for the entire Provision Shop POS
+   Prevents unwanted horizontal scrolling on mobile devices
+========================================================= */
+
+/* =========================
+   GLOBAL RESET
+========================= */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+}
+
+body {
+    width: 100%;
+    max-width: 100%;
+    min-height: 100vh;
+    margin: 0;
+    overflow-x: hidden;
+}
+
+/* Prevent media from exceeding the screen */
+
+img,
+svg,
+video,
+canvas,
+iframe {
+    display: block;
+    max-width: 100%;
+}
+
+/* Prevent long words and URLs from causing overflow */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+span,
+a,
+td,
+th,
+label {
+    overflow-wrap: anywhere;
+    word-break: normal;
+}
+
+/* Form elements should never exceed their containers */
+
+input,
+select,
+textarea,
+button {
+    max-width: 100%;
+    min-width: 0;
+    font: inherit;
+}
+
+/* =========================
+   MAIN PAGE CONTAINERS
+========================= */
+
+.container,
+.page-container,
+.main-container,
+.content-container,
+.dashboard-container,
+.pos-container,
+.sales-container,
+.restock-container,
+.form-container {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Prevent flex and grid children from overflowing */
+
+.row,
+.flex-container,
+.header-container,
+.nav-container,
+.content-grid,
+.dashboard-grid,
+.stats-grid,
+.product-grid {
+    min-width: 0;
+}
+
+.row>*,
+.flex-container>*,
+.header-container>*,
+.nav-container>*,
+.content-grid>*,
+.dashboard-grid>*,
+.stats-grid>*,
+.product-grid>* {
+    min-width: 0;
+}
+
+/* =========================
+   RESPONSIVE IMAGES & LOGOS
+========================= */
+
+.store-logo,
+.logo,
+.brand-logo,
+img {
+    max-width: 100%;
+    object-fit: contain;
+}
+
+.store-logo {
+    height: auto;
+}
+
+/* =========================
+   RESPONSIVE BUTTONS
+========================= */
+
+button,
+.btn,
+.action-button,
+.primary-btn,
+.secondary-btn,
+.danger-btn,
+.clear-cart-btn {
+    max-width: 100%;
+    min-width: 0;
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
+/* =========================
+   RESPONSIVE FORMS
+========================= */
+
+form {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+}
+
+.form-group,
+.form-row,
+.form-field {
+    min-width: 0;
+    max-width: 100%;
+}
+
+.form-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.form-row>* {
+    flex: 1 1 220px;
+    min-width: 0;
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+    max-width: 100%;
+}
+
+/* =========================
+   RESPONSIVE CARDS
+========================= */
+
+.card,
+.stat-card,
+.product-card,
+.sales-card,
+.form-card,
+.panel,
+.summary-card,
+.activity-card {
+    max-width: 100%;
+    min-width: 0;
+}
+
+/* =========================
+   RESPONSIVE TABLES
+========================= */
+
+.table-wrapper,
+.table-container,
+.responsive-table {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+}
+
+.table-wrapper table,
+.table-container table,
+.responsive-table table {
+    width: 100%;
+    max-width: 100%;
+    border-collapse: collapse;
+}
+
+/* Allow very long table text to wrap */
+
+table td,
+table th {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+/* =========================
+   RESPONSIVE GRAPHS
+========================= */
+
+.chart-container,
+.graph-container,
+.sales-chart,
+.chart-wrapper {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.chart-container svg,
+.graph-container svg,
+.sales-chart svg,
+.chart-wrapper svg {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+}
+
+/* =========================
+   RESPONSIVE PRODUCT GRID
+========================= */
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    width: 100%;
+}
+
+/* =========================
+   RESPONSIVE CART
+========================= */
+
+.cart,
+.cart-panel,
+.cart-container,
+.sales-cart {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+}
+
+.cart-item {
+    min-width: 0;
+    max-width: 100%;
+}
+
+.cart-item input,
+.cart-item select {
+    min-width: 0;
+    max-width: 100%;
+}
+
+/* =========================================================
+   TABLET AND PHONE VIEW
+========================================================= */
+
+@media (max-width: 768px) {
+
+    body {
+        font-size: 14px;
+    }
+
+    /* Page spacing */
+
+    .container,
+    .page-container,
+    .main-container,
+    .content-container,
+    .dashboard-container,
+    .pos-container,
+    .sales-container,
+    .restock-container,
+    .form-container {
+        width: 100%;
+        max-width: 100%;
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    /* Header */
+
+    .top-header {
+        width: 100%;
+        max-width: 100%;
+        overflow: hidden;
+    }
+
+    .header-container {
+        width: 100%;
+        max-width: 100%;
+        padding-left: 12px;
+        padding-right: 12px;
+        gap: 10px;
+    }
+
+    /* Navigation */
+
+    .navbar,
+    .nav-links,
+    .navigation-links {
+        max-width: 100%;
+        min-width: 0;
+    }
+
+    .nav-links {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .nav-links a {
+        max-width: 100%;
+        white-space: normal;
+    }
+
+    /* Stack major page sections */
+
+    .dashboard-grid,
+    .content-grid,
+    .main-grid,
+    .sales-layout,
+    .pos-layout,
+    .restock-layout {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* Stack flex layouts */
+
+    .row,
+    .flex-container,
+    .form-row {
+        flex-wrap: wrap;
+    }
+
+    /* Cards */
+
+    .card,
+    .stat-card,
+    .product-card,
+    .sales-card,
+    .form-card,
+    .panel,
+    .summary-card {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+    }
+
+    /* Dashboard statistics */
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 10px;
+    }
+
+    .stat-card {
+        padding: 14px;
+    }
+
+    /* Headings */
+
+    h1 {
+        font-size: 25px;
+        line-height: 1.2;
+    }
+
+    h2 {
+        font-size: 21px;
+        line-height: 1.25;
+    }
+
+    h3 {
+        font-size: 18px;
+        line-height: 1.3;
+    }
+
+    /* Buttons */
+
+    button,
+    .btn,
+    .action-button {
+        max-width: 100%;
+        min-height: 40px;
+        padding: 10px 12px;
+    }
+
+    /* Search area */
+
+    .search-container,
+    .search-box,
+    .search-wrapper {
+        display: flex;
+        flex-wrap: wrap;
+        width: 100%;
+        max-width: 100%;
+        gap: 8px;
+    }
+
+    .search-container input,
+    .search-box input,
+    .search-wrapper input {
+        flex: 1 1 180px;
+        min-width: 0;
+    }
+
+    /* Product grid */
+
+    .product-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 10px;
+    }
+
+    .product-card {
+        padding: 12px;
+    }
+
+    .product-card h3,
+    .product-card h4 {
+        font-size: 15px;
+    }
+
+    /* Cart */
+
+    .cart,
+    .cart-panel,
+    .cart-container,
+    .sales-cart {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+    }
+
+    .cart-item {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .cart-item>* {
+        min-width: 0;
+        max-width: 100%;
+    }
+
+    /* Forms */
+
+    .form-row>* {
+        flex: 1 1 100%;
+        width: 100%;
+    }
+
+    /* Tables remain usable */
+
+    .table-wrapper,
+    .table-container,
+    .responsive-table {
+        overflow-x: auto;
+    }
+
+    table {
+        font-size: 13px;
+    }
+
+    table th,
+    table td {
+        padding: 8px;
+    }
+
+    /* Charts */
+
+    .chart-container,
+    .graph-container,
+    .sales-chart,
+    .chart-wrapper {
+        width: 100%;
+        max-width: 100%;
+        overflow: hidden;
+    }
+
+    /* Hide desktop-only elements */
+
+    .desktop-only {
+        display: none !important;
+    }
+}
+
+/* =========================================================
+   SMALL PHONE VIEW
+========================================================= */
+
+@media (max-width: 480px) {
+
+    body {
+        font-size: 13px;
+    }
+
+    .container,
+    .page-container,
+    .main-container,
+    .content-container,
+    .dashboard-container,
+    .pos-container,
+    .sales-container,
+    .restock-container,
+    .form-container {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .header-container {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    /* Two-column product layout */
+
+    .product-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 8px;
+    }
+
+    .product-card {
+        padding: 10px;
+        border-radius: 10px;
+    }
+
+    .product-card h3,
+    .product-card h4 {
+        font-size: 14px;
+    }
+
+    /* Statistics */
+
+    .stats-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* Headings */
+
+    h1 {
+        font-size: 22px;
+    }
+
+    h2 {
+        font-size: 19px;
+    }
+
+    h3 {
+        font-size: 17px;
+    }
+
+    /* Buttons */
+
+    button,
+    .btn,
+    .action-button {
+        font-size: 13px;
+        padding: 9px 10px;
+    }
+
+    /* Inputs */
+
+    input,
+    select,
+    textarea {
+        font-size: 16px;
+    }
+
+    /* Prevent oversized icons */
+
+    .icon,
+    .material-icons,
+    .fa,
+    svg {
+        max-width: 100%;
+    }
+
+    /* Mobile-only elements */
+
+    .mobile-only {
+        display: block !important;
+    }
+}
+
+/* =========================================================
+   EXTRA SMALL PHONES
+========================================================= */
+
+@media (max-width: 360px) {
+
+    .product-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .header-container {
+        gap: 6px;
+    }
+
+    h1 {
+        font-size: 20px;
+    }
+
+    h2 {
+        font-size: 18px;
+    }
+
+    button,
+    .btn {
+        font-size: 12px;
+        padding: 8px;
+    }
+}

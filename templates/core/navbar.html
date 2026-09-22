@@ -1,0 +1,1238 @@
+{% load static %}
+
+<style>
+    /* =========================================================
+       KOUNTER THEME VARIABLES
+    ========================================================= */
+
+    :root {
+        --k-page-bg: #f5f7fb;
+        --k-card-bg: #ffffff;
+        --k-header-bg: #ffffff;
+
+        --k-text: #111827;
+        --k-muted: #6b7280;
+
+        --k-border: #dfe4ec;
+
+        /* LIGHT NAVIGATION */
+        --k-nav-text: #1f2937;
+        --k-nav-hover-bg: #dbeafe;
+        --k-nav-hover-text: #1d4ed8;
+        --k-nav-hover-border: #93c5fd;
+
+        --k-nav-active-bg: #bfdbfe;
+        --k-nav-active-text: #1e40af;
+
+        --k-primary: #2563eb;
+
+        --k-danger: #dc2626;
+        --k-danger-hover-bg: #fee2e2;
+        --k-danger-hover-border: #fca5a5;
+
+        --k-shadow:
+            0 4px 18px rgba(15, 23, 42, 0.08);
+    }
+
+
+    /* =========================================================
+       DARK THEME
+    ========================================================= */
+
+    html[data-theme="dark"] {
+        --k-page-bg: #0f172a;
+        --k-card-bg: #172033;
+        --k-header-bg: #111827;
+
+        --k-text: #f8fafc;
+        --k-muted: #94a3b8;
+
+        --k-border: #263449;
+
+        --k-nav-text: #e2e8f0;
+        --k-nav-hover-bg: #1e3a5f;
+        --k-nav-hover-text: #93c5fd;
+        --k-nav-hover-border: #3b82f6;
+
+        --k-nav-active-bg: #1e40af;
+        --k-nav-active-text: #dbeafe;
+
+        --k-primary: #60a5fa;
+
+        --k-danger: #f87171;
+        --k-danger-hover-bg: rgba(248, 113, 113, .15);
+        --k-danger-hover-border: rgba(248, 113, 113, .4);
+
+        --k-shadow:
+            0 5px 25px rgba(0, 0, 0, .30);
+    }
+
+
+    /* =========================================================
+       NAVBAR
+    ========================================================= */
+
+    .kounter-header {
+        width: 100%;
+
+        position: relative;
+
+        z-index: 9999;
+
+        background: var(--k-header-bg);
+
+        color: var(--k-text);
+
+        border-bottom: 1px solid var(--k-border);
+
+        box-shadow: var(--k-shadow);
+
+        box-sizing: border-box;
+    }
+
+
+    .kounter-header *,
+    .kounter-header *::before,
+    .kounter-header *::after {
+        box-sizing: border-box;
+    }
+
+
+    .kounter-header-container {
+        width: 100%;
+
+        max-width: 1500px;
+
+        min-height: 70px;
+
+        margin: 0 auto;
+
+        padding: 9px 20px;
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 15px;
+    }
+
+
+    /* =========================================================
+       LOGO
+    ========================================================= */
+
+    .kounter-logo-link {
+        width: 90px;
+        height: 60px;
+
+        flex: 0 0 68px;
+
+        display: flex;
+
+        align-items: center;
+        justify-content: center;
+
+        overflow: hidden;
+
+        border-radius: 15px;
+
+        background: var(--k-card-bg);
+
+        border: 1px solid var(--k-border);
+
+        text-decoration: none;
+
+        transition:
+            border-color .2s ease,
+            box-shadow .2s ease,
+            transform .2s ease;
+    }
+
+
+    .kounter-logo-link:hover {
+        border-color: var(--k-primary);
+
+        box-shadow:
+            0 5px 18px rgba(37, 99, 235, .18);
+
+        transform: translateY(-1px);
+    }
+
+
+    .kounter-logo {
+        width: 100%;
+        height: 100%;
+
+        object-fit: cover;
+
+        padding: 2px;
+
+        display: block;
+    }
+
+
+    .kounter-logo-light {
+        display: block;
+    }
+
+
+    .kounter-logo-dark {
+        display: none;
+    }
+
+
+    html[data-theme="dark"] .kounter-logo-light {
+        display: none;
+    }
+
+
+    html[data-theme="dark"] .kounter-logo-dark {
+        display: block;
+    }
+
+
+    /* =========================================================
+       STORE / ADMIN INFORMATION
+    ========================================================= */
+
+    .kounter-store-info {
+        min-width: 0;
+
+        flex: 1;
+    }
+
+
+    .kounter-store-name {
+        color: var(--k-text);
+
+        font-size: 18px;
+
+        font-weight: 800;
+
+        line-height: 1.2;
+
+        white-space: nowrap;
+
+        overflow: hidden;
+
+        text-overflow: ellipsis;
+    }
+
+
+    .kounter-user-role {
+        margin-top: 4px;
+
+        color: var(--k-muted);
+
+        font-size: 10px;
+
+        font-weight: 800;
+
+        letter-spacing: .09em;
+    }
+
+
+    /* =========================================================
+       DESKTOP NAVIGATION
+    ========================================================= */
+
+    .kounter-desktop-nav {
+        display: flex !important;
+
+        align-items: center;
+
+        justify-content: flex-end;
+
+        gap: 5px;
+
+        flex-wrap: nowrap;
+
+        flex-shrink: 0;
+    }
+
+
+    /* =========================================================
+       NAVIGATION LINKS
+    ========================================================= */
+
+    .kounter-nav-link {
+        min-height: 40px;
+
+        padding: 8px 12px;
+
+        display: inline-flex !important;
+
+        align-items: center;
+
+        justify-content: center;
+
+        border-radius: 9px;
+
+        color: var(--k-nav-text) !important;
+
+        background: transparent;
+
+        border: 1px solid transparent;
+
+        text-decoration: none !important;
+
+        font-size: 13px;
+
+        font-weight: 700;
+
+        white-space: nowrap;
+
+        transition:
+            background-color .18s ease,
+            color .18s ease,
+            border-color .18s ease,
+            transform .15s ease,
+            box-shadow .18s ease;
+    }
+
+
+    .kounter-nav-link:hover,
+    .kounter-nav-link:focus-visible {
+        color: var(--k-nav-hover-text) !important;
+
+        background: var(--k-nav-hover-bg) !important;
+
+        border-color: var(--k-nav-hover-border) !important;
+
+        box-shadow:
+            0 2px 7px rgba(37, 99, 235, .10);
+
+        outline: none;
+
+        transform: translateY(-1px);
+    }
+
+
+    .kounter-nav-link:active {
+        transform: translateY(0);
+    }
+
+
+    /* =========================================================
+       ACTIVE PAGE
+    ========================================================= */
+
+    .kounter-nav-link[aria-current="page"] {
+        color: var(--k-nav-active-text) !important;
+
+        background: var(--k-nav-active-bg) !important;
+
+        border-color: var(--k-nav-hover-border) !important;
+    }
+
+
+    /* =========================================================
+       LOGOUT
+    ========================================================= */
+
+    .kounter-logout {
+        color: var(--k-danger) !important;
+    }
+
+
+    .kounter-logout:hover,
+    .kounter-logout:focus-visible {
+        color: var(--k-danger) !important;
+
+        background: var(--k-danger-hover-bg) !important;
+
+        border-color: var(--k-danger-hover-border) !important;
+
+        box-shadow:
+            0 2px 7px rgba(220, 38, 38, .10);
+    }
+
+
+    /* =========================================================
+       THEME TOGGLE
+    ========================================================= */
+
+    .kounter-theme-switch {
+        width: 42px;
+        height: 24px;
+
+        flex: 0 0 42px;
+
+        padding: 0;
+
+        margin: 0 3px;
+
+        border: 0;
+
+        outline: none;
+
+        background: transparent;
+
+        display: inline-flex !important;
+
+        align-items: center;
+
+        justify-content: center;
+
+        cursor: pointer;
+    }
+
+
+    .kounter-theme-switch:focus-visible {
+        outline: 2px solid var(--k-primary);
+
+        outline-offset: 3px;
+
+        border-radius: 999px;
+    }
+
+
+    .kounter-theme-track {
+        width: 40px;
+        height: 21px;
+
+        position: relative;
+
+        display: block;
+
+        border-radius: 999px;
+
+        background: #cbd5e1;
+
+        border: 1px solid #94a3b8;
+
+        transition:
+            background-color .2s ease,
+            border-color .2s ease;
+    }
+
+
+    .kounter-theme-thumb {
+        width: 15px;
+        height: 15px;
+
+        position: absolute;
+
+        top: 2px;
+        left: 2px;
+
+        border-radius: 50%;
+
+        background: #ffffff;
+
+        box-shadow:
+            0 1px 4px rgba(0, 0, 0, .25);
+
+        transition:
+            transform .2s ease,
+            background-color .2s ease;
+    }
+
+
+    html[data-theme="dark"] .kounter-theme-track {
+        background: #334155;
+
+        border-color: #64748b;
+    }
+
+
+    html[data-theme="dark"] .kounter-theme-thumb {
+        transform: translateX(19px);
+
+        background: #0f172a;
+    }
+
+
+    /* =========================================================
+       MOBILE MENU BUTTON
+    ========================================================= */
+
+    .kounter-mobile-button {
+        width: 44px;
+        height: 44px;
+
+        flex: 0 0 44px;
+
+        margin-left: auto;
+
+        padding: 0;
+
+        border: 1px solid var(--k-border);
+
+        border-radius: 10px;
+
+        background: var(--k-card-bg);
+
+        display: none;
+
+        align-items: center;
+
+        justify-content: center;
+
+        flex-direction: column;
+
+        gap: 5px;
+
+        cursor: pointer;
+
+        transition:
+            background-color .2s ease,
+            border-color .2s ease;
+    }
+
+
+    .kounter-mobile-button:hover,
+    .kounter-mobile-button:focus-visible {
+        background: var(--k-nav-hover-bg);
+
+        border-color: var(--k-nav-hover-border);
+
+        outline: none;
+    }
+
+
+    .kounter-mobile-button span {
+        width: 21px;
+        height: 2px;
+
+        border-radius: 10px;
+
+        background: var(--k-text);
+    }
+
+
+    /* =========================================================
+       MOBILE THEME TOGGLE
+    ========================================================= */
+
+    .kounter-mobile-theme {
+        display: none !important;
+    }
+
+
+    /* =========================================================
+       MOBILE NAVIGATION
+    ========================================================= */
+
+    .kounter-mobile-nav {
+        display: none;
+
+        width: 100%;
+
+        padding: 10px 14px 16px;
+
+        background: var(--k-header-bg);
+
+        border-top: 1px solid var(--k-border);
+
+        box-sizing: border-box;
+    }
+
+
+    .kounter-mobile-nav.open {
+        display: flex;
+
+        flex-direction: column;
+
+        gap: 5px;
+    }
+
+
+    .kounter-mobile-nav a {
+        width: 100%;
+
+        min-height: 46px;
+
+        padding: 11px 14px;
+
+        display: flex;
+
+        align-items: center;
+
+        border-radius: 10px;
+
+        color: var(--k-nav-text) !important;
+
+        background: transparent;
+
+        border: 1px solid transparent;
+
+        text-decoration: none;
+
+        font-size: 14px;
+
+        font-weight: 700;
+
+        transition:
+            background-color .18s ease,
+            color .18s ease,
+            border-color .18s ease;
+    }
+
+
+    .kounter-mobile-nav a:hover,
+    .kounter-mobile-nav a:focus-visible {
+        background: var(--k-nav-hover-bg) !important;
+
+        color: var(--k-nav-hover-text) !important;
+
+        border-color: var(--k-nav-hover-border) !important;
+
+        outline: none;
+    }
+
+
+    .kounter-mobile-nav .kounter-logout {
+        color: var(--k-danger) !important;
+    }
+
+
+    .kounter-mobile-nav .kounter-logout:hover,
+    .kounter-mobile-nav .kounter-logout:focus-visible {
+        background: var(--k-danger-hover-bg) !important;
+
+        color: var(--k-danger) !important;
+
+        border-color: var(--k-danger-hover-border) !important;
+    }
+
+
+    /* =========================================================
+       MOBILE THEME ROW
+    ========================================================= */
+
+    .kounter-mobile-theme-row {
+        min-height: 46px;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: space-between;
+
+        padding: 5px 3px;
+
+        color: var(--k-muted);
+
+        font-size: 13px;
+
+        font-weight: 700;
+    }
+
+
+    .kounter-mobile-theme-row .kounter-theme-switch {
+        display: inline-flex !important;
+    }
+
+
+    /* =========================================================
+       TABLET / MOBILE
+    ========================================================= */
+
+    @media (max-width: 1150px) {
+
+        .kounter-desktop-nav {
+            display: none !important;
+        }
+
+
+        .kounter-mobile-theme {
+            display: inline-flex !important;
+        }
+
+
+        .kounter-mobile-button {
+            display: flex !important;
+        }
+
+    }
+
+
+    /* =========================================================
+       SMALL PHONES
+    ========================================================= */
+
+    @media (max-width: 600px) {
+
+        .kounter-header-container {
+            min-height: 70px;
+
+            padding: 7px 11px;
+
+            gap: 10px;
+        }
+
+
+        .kounter-logo-link {
+            width: 58px;
+            height: 58px;
+
+            flex-basis: 58px;
+
+            border-radius: 12px;
+        }
+
+
+        .kounter-logo {
+            padding: 1px;
+        }
+
+
+        .kounter-store-name {
+            font-size: 15px;
+        }
+
+
+        .kounter-user-role {
+            font-size: 9px;
+        }
+
+
+        .kounter-mobile-theme {
+            width: 40px;
+
+            flex-basis: 40px;
+        }
+
+
+        .kounter-mobile-button {
+            width: 42px;
+            height: 42px;
+
+            flex-basis: 42px;
+        }
+
+    }
+
+
+    /* =========================================================
+       VERY SMALL SCREENS
+    ========================================================= */
+
+    @media (max-width: 380px) {
+
+        .kounter-logo-link {
+            width: 53px;
+            height: 53px;
+
+            flex-basis: 53px;
+        }
+
+
+        .kounter-store-name {
+            font-size: 14px;
+        }
+
+
+        .kounter-mobile-theme {
+            transform: scale(.9);
+        }
+
+    }
+
+
+    /* =========================================================
+       PAGE BACKGROUND
+    ========================================================= */
+
+    html[data-theme="dark"] body,
+    html[data-theme="light"] body {
+        background-color: var(--k-page-bg);
+
+        color: var(--k-text);
+    }
+</style>
+
+
+<!-- =========================================================
+     KOUNTER NAVBAR
+========================================================= -->
+
+<header class="kounter-header">
+
+    <div class="kounter-header-container">
+
+
+        <!-- =================================================
+             LOGO
+        ================================================== -->
+
+        <a href="{% if request.user.is_superuser %}{% url 'manage_stores' %}{% else %}{% url 'dashboard' %}{% endif %}"
+            class="kounter-logo-link"
+            aria-label="{% if request.user.is_superuser %}Manage Stores{% else %}Go to Dashboard{% endif %}">
+
+            <img src="{% static 'core/Kounter_light.jpg' %}" alt="Kounter" class="kounter-logo kounter-logo-light">
+
+            <img src="{% static 'core/Kounter_dark.jpg' %}" alt="Kounter" class="kounter-logo kounter-logo-dark">
+
+        </a>
+
+
+        <!-- =================================================
+             STORE / ADMIN INFORMATION
+        ================================================== -->
+
+        <div class="kounter-store-info">
+
+            <div class="kounter-store-name">
+
+                {% if request.user.is_superuser %}
+
+                KOUNTER
+
+                {% else %}
+
+                {{ request.user.store.name|default:"TRON HUB" }}
+
+                {% endif %}
+
+            </div>
+
+
+            <div class="kounter-user-role">
+
+                {% if request.user.is_superuser %}
+
+                SUPER ADMIN
+
+                {% elif request.user.role == "ADMIN" %}
+
+                STORE ADMIN
+
+                {% elif request.user.role == "MANAGER" %}
+
+                MANAGER
+
+                {% elif request.user.role == "ATTENDANT" %}
+
+                ATTENDANT
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             DESKTOP NAVIGATION
+        ================================================== -->
+
+        <nav class="kounter-desktop-nav" aria-label="Main navigation">
+
+
+            {% if request.user.is_superuser %}
+
+            <!-- =================================================
+                     SUPER ADMIN NAVIGATION
+                ================================================== -->
+
+            <a href="{% url 'manage_stores' %}" class="kounter-nav-link">
+                Stores
+            </a>
+
+
+            <a href="{% url 'manage_users' %}" class="kounter-nav-link">
+                Users
+            </a>
+
+
+            {% else %}
+
+            <!-- =================================================
+                     STORE USER NAVIGATION
+                ================================================== -->
+
+            <a href="{% url 'dashboard' %}" class="kounter-nav-link">
+                Dashboard
+            </a>
+
+
+            <a href="{% url 'pos' %}" class="kounter-nav-link">
+                POS
+            </a>
+
+
+            <a href="{% url 'daily_sales' %}" class="kounter-nav-link">
+                Daily Sales
+            </a>
+
+
+            <a href="{% url 'all_sales' %}" class="kounter-nav-link">
+                All Sales
+            </a>
+
+
+            <!-- PRODUCTS -->
+
+            <a href="{% url 'active_products' %}" class="kounter-nav-link">
+                Products
+            </a>
+
+
+            <!-- ADMIN / MANAGER ONLY -->
+
+            {% if request.user.role == "ADMIN" or request.user.role == "MANAGER" %}
+
+            <a href="{% url 'add_product' %}" class="kounter-nav-link">
+                Add Product
+            </a>
+
+
+            <a href="{% url 'restock' %}" class="kounter-nav-link">
+                Restock
+            </a>
+
+            {% endif %}
+
+            {% endif %}
+
+
+            <!-- =================================================
+                 THEME TOGGLE
+            ================================================== -->
+
+            <button type="button" class="kounter-theme-switch theme-switch" aria-label="Toggle dark mode"
+                aria-pressed="false" title="Toggle dark mode">
+
+                <span class="kounter-theme-track">
+                    <span class="kounter-theme-thumb"></span>
+                </span>
+
+            </button>
+
+
+            <!-- =================================================
+                 PROFILE
+            ================================================== -->
+
+            <a href="{% url 'profile' %}" class="kounter-nav-link">
+                👤 Profile
+            </a>
+
+
+            <!-- =================================================
+                 LOGOUT
+            ================================================== -->
+
+            <a href="{% url 'logout' %}" class="kounter-nav-link kounter-logout">
+                Logout
+            </a>
+
+        </nav>
+
+
+        <!-- =================================================
+             MOBILE THEME SWITCH
+        ================================================== -->
+
+        <button type="button" class="kounter-theme-switch kounter-mobile-theme theme-switch"
+            aria-label="Toggle dark mode" aria-pressed="false" title="Toggle dark mode">
+
+            <span class="kounter-theme-track">
+                <span class="kounter-theme-thumb"></span>
+            </span>
+
+        </button>
+
+
+        <!-- =================================================
+             MOBILE MENU BUTTON
+        ================================================== -->
+
+        <button type="button" class="kounter-mobile-button" id="kounterMobileMenuButton"
+            aria-label="Open navigation menu" aria-expanded="false" aria-controls="kounterMobileNav">
+
+            <span></span>
+            <span></span>
+            <span></span>
+
+        </button>
+
+    </div>
+
+
+    <!-- =====================================================
+         MOBILE NAVIGATION
+    ====================================================== -->
+
+    <nav class="kounter-mobile-nav" id="kounterMobileNav" aria-label="Mobile navigation">
+
+
+        {% if request.user.is_superuser %}
+
+        <!-- =================================================
+                 SUPER ADMIN MOBILE NAVIGATION
+            ================================================== -->
+
+        <a href="{% url 'manage_stores' %}">
+            🏪 Manage Stores
+        </a>
+
+
+        <a href="{% url 'manage_users' %}">
+            👥 Manage Users
+        </a>
+
+
+        {% else %}
+
+        <!-- =================================================
+                 STORE USER MOBILE NAVIGATION
+            ================================================== -->
+
+        <a href="{% url 'dashboard' %}">
+            Dashboard
+        </a>
+
+
+        <a href="{% url 'pos' %}">
+            POS
+        </a>
+
+
+        <a href="{% url 'daily_sales' %}">
+            Daily Sales
+        </a>
+
+
+        <a href="{% url 'all_sales' %}">
+            All Sales
+        </a>
+
+
+        <a href="{% url 'active_products' %}">
+            Products
+        </a>
+
+
+        {% if request.user.role == "ADMIN" or request.user.role == "MANAGER" %}
+
+        <a href="{% url 'add_product' %}">
+            Add Product
+        </a>
+
+
+        <a href="{% url 'restock' %}">
+            Restock
+        </a>
+
+        {% endif %}
+
+        {% endif %}
+
+
+        <!-- =================================================
+             MOBILE THEME ROW
+        ================================================== -->
+
+        <div class="kounter-mobile-theme-row">
+
+            <span>
+                Appearance
+            </span>
+
+
+            <button type="button" class="kounter-theme-switch theme-switch" aria-label="Toggle dark mode"
+                aria-pressed="false" title="Toggle dark mode">
+
+                <span class="kounter-theme-track">
+                    <span class="kounter-theme-thumb"></span>
+                </span>
+
+            </button>
+
+        </div>
+
+
+        <!-- =================================================
+             PROFILE
+        ================================================== -->
+
+        <a href="{% url 'profile' %}">
+            👤 Profile
+        </a>
+
+
+        <!-- =================================================
+             MOBILE LOGOUT
+        ================================================== -->
+
+        <a href="{% url 'logout' %}" class="kounter-logout">
+            Logout
+        </a>
+
+    </nav>
+
+</header>
+
+
+<!-- =========================================================
+     MOBILE NAVIGATION JAVASCRIPT
+========================================================= -->
+
+<script>
+
+    (function () {
+
+        "use strict";
+
+
+        const menuButton =
+            document.getElementById(
+                "kounterMobileMenuButton"
+            );
+
+
+        const mobileNav =
+            document.getElementById(
+                "kounterMobileNav"
+            );
+
+
+        if (!menuButton || !mobileNav) {
+            return;
+        }
+
+
+        /* =====================================================
+           TOGGLE MENU
+        ===================================================== */
+
+        menuButton.addEventListener(
+            "click",
+            function () {
+
+                const isOpen =
+                    mobileNav.classList.toggle(
+                        "open"
+                    );
+
+
+                menuButton.setAttribute(
+                    "aria-expanded",
+                    isOpen ? "true" : "false"
+                );
+
+
+                menuButton.setAttribute(
+                    "aria-label",
+                    isOpen
+                        ? "Close navigation menu"
+                        : "Open navigation menu"
+                );
+
+            }
+        );
+
+
+        /* =====================================================
+           CLOSE AFTER LINK CLICK
+        ===================================================== */
+
+        mobileNav
+            .querySelectorAll("a")
+            .forEach(function (link) {
+
+                link.addEventListener(
+                    "click",
+                    function () {
+
+                        mobileNav.classList.remove(
+                            "open"
+                        );
+
+
+                        menuButton.setAttribute(
+                            "aria-expanded",
+                            "false"
+                        );
+
+
+                        menuButton.setAttribute(
+                            "aria-label",
+                            "Open navigation menu"
+                        );
+
+                    }
+                );
+
+            });
+
+
+        /* =====================================================
+           CLOSE WHEN CLICKING OUTSIDE
+        ===================================================== */
+
+        document.addEventListener(
+            "click",
+            function (event) {
+
+                if (
+                    mobileNav.classList.contains("open") &&
+                    !mobileNav.contains(event.target) &&
+                    !menuButton.contains(event.target)
+                ) {
+
+                    mobileNav.classList.remove(
+                        "open"
+                    );
+
+
+                    menuButton.setAttribute(
+                        "aria-expanded",
+                        "false"
+                    );
+
+
+                    menuButton.setAttribute(
+                        "aria-label",
+                        "Open navigation menu"
+                    );
+
+                }
+
+            }
+        );
+
+
+        /* =====================================================
+           CLOSE WITH ESCAPE
+        ===================================================== */
+
+        document.addEventListener(
+            "keydown",
+            function (event) {
+
+                if (
+                    event.key === "Escape" &&
+                    mobileNav.classList.contains("open")
+                ) {
+
+                    mobileNav.classList.remove(
+                        "open"
+                    );
+
+
+                    menuButton.setAttribute(
+                        "aria-expanded",
+                        "false"
+                    );
+
+
+                    menuButton.setAttribute(
+                        "aria-label",
+                        "Open navigation menu"
+                    );
+
+
+                    menuButton.focus();
+
+                }
+
+            }
+        );
+
+    })();
+
+</script>

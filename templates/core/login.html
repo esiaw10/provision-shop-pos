@@ -2,160 +2,557 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    {% load static %}
+
+    <script src="{% static 'core/js/theme.js' %}"></script>
+
+    {% load static %}
+
+    <link rel="stylesheet" href="{% static 'core/css/phone_view.css' %}">
+
     <title>Login — Provision POS</title>
+
     <style>
         :root {
-            --primary: #0d6efd;
-            --primary-hover: #0b5ed7;
-            --dark: #212529;
-            --light: #f8f9fa;
-            --border: #dee2e6;
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --accent: #60a5fa;
+            --text: #0f172a;
+            --muted: #64748b;
+            --surface: rgba(255, 255, 255, 0.94);
+            --input-bg: #f8fafc;
+            --border: #e2e8f0;
+            --danger-bg: #fef2f2;
+            --danger-text: #b91c1c;
+            --danger-border: #fecaca;
         }
 
         * {
             box-sizing: border-box;
         }
 
+        html,
         body {
-            font-family: Arial, sans-serif;
+            min-height: 100%;
+        }
+
+        body {
             margin: 0;
-            background: #eef2f5;
+            min-height: 100vh;
+            padding: 24px;
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 100vh;
-            padding: 15px;
+            font-family: Inter, "Segoe UI", Arial, sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(96, 165, 250, 0.28), transparent 35%),
+                radial-gradient(circle at bottom right, rgba(37, 99, 235, 0.18), transparent 35%),
+                #eef4ff;
         }
 
-        .login-card {
-            background: #ffffff;
+        .login-shell {
             width: 100%;
-            max-width: 400px;
-            padding: 30px 25px;
-            border-radius: 16px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            max-width: 960px;
+            min-height: 570px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 28px;
+            background: var(--surface);
+            box-shadow: 0 25px 80px rgba(30, 64, 175, 0.16);
+            backdrop-filter: blur(16px);
         }
 
-        .brand-section {
-            text-align: center;
-            margin-bottom: 25px;
+        .welcome-panel {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 48px;
+            overflow: hidden;
+            color: white;
+            background:
+                linear-gradient(145deg, rgba(37, 99, 235, 0.98), rgba(30, 64, 175, 0.98)),
+                #2563eb;
         }
 
-        .brand-logo {
-            font-size: 36px;
-            margin-bottom: 5px;
+        .welcome-panel::before,
+        .welcome-panel::after {
+            content: "";
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.09);
         }
 
-        .brand-title {
-            font-size: 22px;
-            font-weight: bold;
-            color: var(--dark);
+        .welcome-panel::before {
+            width: 300px;
+            height: 300px;
+            top: -120px;
+            right: -120px;
+        }
+
+        .welcome-panel::after {
+            width: 240px;
+            height: 240px;
+            bottom: -120px;
+            left: -100px;
+        }
+
+        .brand-mark {
+            position: relative;
+            z-index: 1;
+            width: 64px;
+            height: 64px;
+            display: grid;
+            place-items: center;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.18);
+            border: 1px solid rgba(255, 255, 255, 0.28);
+            font-size: 32px;
+            box-shadow: 0 12px 25px rgba(15, 23, 42, 0.12);
+        }
+
+        .welcome-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .welcome-content h1 {
+            margin: 0 0 16px;
+            font-size: clamp(30px, 4vw, 44px);
+            line-height: 1.1;
+            letter-spacing: -1px;
+        }
+
+        .welcome-content p {
+            max-width: 350px;
             margin: 0;
+            color: rgba(255, 255, 255, 0.84);
+            line-height: 1.7;
+            font-size: 15px;
         }
 
-        .brand-subtitle {
+        .feature-list {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            gap: 12px;
+            margin-top: 30px;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 10px;
             font-size: 14px;
-            color: #6c757d;
-            margin-top: 5px;
+            color: rgba(255, 255, 255, 0.92);
+        }
+
+        .feature span {
+            display: grid;
+            place-items: center;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.18);
+        }
+
+        .welcome-footer {
+            position: relative;
+            z-index: 1;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.68);
+        }
+
+        .form-panel {
+            display: flex;
+            align-items: center;
+            padding: 48px;
+            background: var(--surface);
+        }
+
+        .form-content {
+            width: 100%;
+            max-width: 360px;
+            margin: auto;
+        }
+
+        .mobile-brand {
+            display: none;
+            text-align: center;
+            font-size: 34px;
+            margin-bottom: 12px;
+        }
+
+        .form-heading h2 {
+            margin: 0 0 8px;
+            font-size: 30px;
+            letter-spacing: -0.8px;
+        }
+
+        .form-heading p {
+            margin: 0 0 30px;
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .error-box {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            padding: 13px 14px;
+            border: 1px solid var(--danger-border);
+            border-radius: 12px;
+            background: var(--danger-bg);
+            color: var(--danger-text);
+            font-size: 13px;
+            line-height: 1.5;
         }
 
         .form-group {
-            margin-bottom: 18px;
+            margin-bottom: 20px;
         }
 
         .form-group label {
             display: block;
-            font-size: 14px;
-            font-weight: bold;
-            color: #495057;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
+            color: var(--text);
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            top: 50%;
+            left: 14px;
+            transform: translateY(-50%);
+            color: var(--muted);
+            pointer-events: none;
+            font-size: 17px;
         }
 
         .form-group input {
             width: 100%;
-            padding: 14px;
-            font-size: 16px;
+            min-height: 52px;
+            padding: 14px 44px;
             border: 1px solid var(--border);
-            border-radius: 10px;
-            background: var(--light);
-            color: var(--dark);
+            border-radius: 13px;
             outline: none;
-            transition: border-color 0.2s;
+            background: var(--input-bg);
+            color: var(--text);
+            font-size: 15px;
+            transition: 0.2s ease;
             -webkit-appearance: none;
         }
 
         .form-group input:focus {
             border-color: var(--primary);
-            background: #ffffff;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.11);
+        }
+
+        .password-toggle {
+            position: absolute;
+            top: 50%;
+            right: 12px;
+            transform: translateY(-50%);
+            padding: 5px;
+            border: 0;
+            background: transparent;
+            color: var(--muted);
+            cursor: pointer;
+            font-size: 16px;
         }
 
         .submit-btn {
             width: 100%;
-            background: var(--primary);
-            color: #ffffff;
-            border: none;
-            padding: 14px;
-            font-size: 16px;
-            font-weight: bold;
-            border-radius: 10px;
+            min-height: 52px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 8px;
+            border: 0;
+            border-radius: 13px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            font-size: 15px;
+            font-weight: 700;
             cursor: pointer;
-            margin-top: 10px;
-            transition: background-color 0.2s;
+            box-shadow: 0 10px 22px rgba(37, 99, 235, 0.22);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
-        .submit-btn:active {
-            background: var(--primary-hover);
+        .submit-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 13px 28px rgba(37, 99, 235, 0.3);
         }
 
-        .error-box {
-            background: #f8d7da;
-            color: #842029;
-            border: 1px solid #f5c2c7;
-            padding: 12px;
-            border-radius: 10px;
+        .submit-btn:disabled {
+            cursor: wait;
+            opacity: 0.85;
+            transform: none;
+        }
+
+        .button-spinner,
+        .page-spinner {
+            width: 18px;
+            height: 18px;
+            border: 3px solid rgba(255, 255, 255, 0.35);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        .form-note {
+            margin-top: 24px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .loading-screen {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 16px;
+            background: linear-gradient(135deg, #eff6ff, #dbeafe);
+        }
+
+        .loading-screen.show {
+            display: flex;
+        }
+
+        .loading-logo {
+            width: 74px;
+            height: 74px;
+            display: grid;
+            place-items: center;
+            border-radius: 23px;
+            background: var(--primary);
+            color: white;
+            font-size: 36px;
+            box-shadow: 0 15px 35px rgba(37, 99, 235, 0.25);
+        }
+
+        .loading-screen h2 {
+            margin: 0;
+            color: #0f172a;
+            font-size: 22px;
+        }
+
+        .loading-screen p {
+            margin: -5px 0 4px;
+            color: #64748b;
             font-size: 14px;
-            margin-bottom: 18px;
-            font-weight: bold;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @media (max-width: 760px) {
+            body {
+                padding: 16px;
+            }
+
+            .login-shell {
+                display: block;
+                min-height: auto;
+                max-width: 430px;
+                border-radius: 24px;
+            }
+
+            .welcome-panel {
+                display: none;
+            }
+
+            .form-panel {
+                padding: 34px 25px;
+            }
+
+            .mobile-brand {
+                display: block;
+            }
+
+            .form-heading {
+                text-align: center;
+            }
+
+            .form-heading h2 {
+                font-size: 27px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        .signup-link {
+            margin-top: 18px;
+            text-align: center;
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .signup-link a {
+            color: #2563eb;
+            font-weight: 800;
+            text-decoration: none;
+        }
+
+        .signup-link a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 
 <body>
+    <div class="login-shell">
+        <section class="welcome-panel">
+            <div class="brand-mark">🏪</div>
 
-    <div class="login-card">
-        <div class="brand-section">
-            <div class="brand-logo">🏪</div>
-            <h1 class="brand-title">Provision POS</h1>
-            <div class="brand-subtitle">Sign in to manage your shop inventory</div>
-        </div>
+            <div class="welcome-content">
+                <h1>Run your shop<br>with confidence.</h1>
+                <p>
+                    Manage products, track stock, and process sales smoothly
+                    from one simple point-of-sale system.
+                </p>
 
-        {% if form.errors or error_message %}
-        <div class="error-box">
-            ❌ Invalid username or password. Please try again.
-        </div>
-        {% endif %}
-
-        <form method="post" action="{% url 'login' %}">
-            {% csrf_token %}
-
-            <div class="form-group">
-                <label for="id_username">Username</label>
-                <input type="text" name="username" id="id_username" placeholder="Enter username" required autofocus
-                    autocomplete="username">
+                <div class="feature-list">
+                    <div class="feature"><span>✓</span> Quick and simple sales processing</div>
+                    <div class="feature"><span>✓</span> Easy inventory management</div>
+                    <div class="feature"><span>✓</span> Clear daily sales records</div>
+                </div>
             </div>
 
-            <div class="form-group">
-                <label for="id_password">Password</label>
-                <input type="password" name="password" id="id_password" placeholder="Enter password" required
-                    autocomplete="current-password">
-            </div>
+            <div class="welcome-footer">Provision POS · Smart shop management</div>
+        </section>
 
-            <button type="submit" class="submit-btn">Sign In</button>
-        </form>
+        <section class="form-panel">
+            <div class="form-content">
+                <div class="mobile-brand">🏪</div>
+
+                <div class="form-heading">
+                    <h2>Welcome back</h2>
+                    <p>Sign in to continue managing your shop.</p>
+                </div>
+
+                {% if form.errors or error_message %}
+                <div class="error-box">
+                    <span>⚠️</span>
+                    <div>Invalid username or password. Please try again.</div>
+                </div>
+                {% endif %}
+
+                <form method="post" action="{% url 'login' %}" id="loginForm">
+                    {% csrf_token %}
+
+                    <div class="form-group">
+                        <label for="id_username">Username</label>
+                        <div class="input-wrapper">
+                            <span class="input-icon">👤</span>
+                            <input type="text" name="username" id="id_username" placeholder="Enter your username"
+                                required autofocus autocomplete="username">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="id_password">Password</label>
+                        <div class="input-wrapper">
+                            <span class="input-icon">🔒</span>
+                            <input type="password" name="password" id="id_password" placeholder="Enter your password"
+                                required autocomplete="current-password">
+
+                            <button type="button" class="password-toggle" id="togglePassword"
+                                aria-label="Show password">
+                                👁
+                            </button>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="submit-btn" id="submitButton">
+                        <span id="buttonText">Sign In</span>
+                    </button>
+
+                    <div class="signup-link">
+                        Don't have an account?
+                        <a href="{% url 'signup' %}">
+                            Create an account
+                        </a>
+                    </div>
+                </form>
+
+                <div class="form-note">
+                    Secure access to your shop dashboard
+                </div>
+            </div>
+        </section>
     </div>
 
+    <div class="loading-screen" id="loadingScreen" aria-live="polite" aria-busy="true">
+        <div class="loading-logo">🏪</div>
+        <div class="page-spinner"></div>
+        <h2>Signing you in...</h2>
+        <p>Please wait while we open your dashboard.</p>
+    </div>
+
+    <script>
+        const loginForm = document.getElementById("loginForm");
+        const submitButton = document.getElementById("submitButton");
+        const buttonText = document.getElementById("buttonText");
+        const loadingScreen = document.getElementById("loadingScreen");
+        const passwordInput = document.getElementById("id_password");
+        const togglePassword = document.getElementById("togglePassword");
+
+        togglePassword.addEventListener("click", function () {
+            const isPassword = passwordInput.type === "password";
+            passwordInput.type = isPassword ? "text" : "password";
+            togglePassword.textContent = isPassword ? "🙈" : "👁";
+            togglePassword.setAttribute(
+                "aria-label",
+                isPassword ? "Hide password" : "Show password"
+            );
+        });
+
+        loginForm.addEventListener("submit", function () {
+            if (!loginForm.checkValidity()) {
+                return;
+            }
+
+            submitButton.disabled = true;
+            buttonText.textContent = "Signing in...";
+
+            const spinner = document.createElement("span");
+            spinner.className = "button-spinner";
+            submitButton.prepend(spinner);
+
+            loadingScreen.classList.add("show");
+        });
+    </script>
 </body>
 
 </html>
